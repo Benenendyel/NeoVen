@@ -15,4 +15,9 @@ This configuration uses **Lazy.nvim** as the package manager and comes with esse
 - **Autopair** – Automatically closes brackets, quotes, etc.
 - **Rosepine** – A minimal and beautiful colorscheme for Neovim.
 - **More-to-come** - I kinda wanna set it up for web development too
+
 ---
+
+## TAKE NOTE:
+- I used help from ChatGPT and Claude in making configurations for each of the plugins I used.
+- I configured some of the things in here
