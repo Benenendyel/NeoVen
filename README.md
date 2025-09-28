@@ -14,6 +14,7 @@ This configuration uses **Lazy.nvim** as the package manager and comes with esse
 - **nvim-jdtls** – Java Development Tools integration for Neovim.
 - **Autopair** – Automatically closes brackets, quotes, etc.
 - **Rosepine** – A minimal and beautiful colorscheme for Neovim.
+- **Nvim-tree** - A cute file explorer better than netrw (hehe).
 - **More-to-come** - I kinda wanna set it up for web development too
 
 ---
