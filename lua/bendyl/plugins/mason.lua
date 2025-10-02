@@ -20,7 +20,7 @@ return {
 
       -- Setup mason-lspconfig
       require("mason-lspconfig").setup({
-        ensure_installed = { "jdtls" },
+        ensure_installed = { "jdtls", },
         automatic_installation = true,
         handlers = {
           -- Default handler for all installed servers

@@ -41,15 +41,15 @@ return {
                     java = {
                         eclipse = { downloadSources = true },
                         configuration = {
-                            updateBuildConfiguration = "interactive",
+                            updateBuildConfiguration = "automatic",
                             -- Java 21 runtime configuration
                             runtimes = {
                                 { name = "JavaSE-21", path = java_home, default = true },
                             },
                         },
                         maven = { downloadSources = true },
-                        implementationsCodeLens = { enabled = true },
-                        referencesCodeLens = { enabled = true },
+                        implementationsCodeLens = { enabled = false },
+                        referencesCodeLens = { enabled = false },
                         references = { includeDecompiledSources = true },
                         format = {
                             enabled = true,

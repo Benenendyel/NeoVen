@@ -12,3 +12,4 @@ vim.opt.softtabstop = 4
 -- this is for the general
 vim.opt.relativenumber = true
 vim.opt.colorcolumn = "100"
+vim.opt.scrolloff = 999
