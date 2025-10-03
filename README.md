@@ -1,6 +1,6 @@
 # NeoVen - Neovim Configuration
 
-Welcome to **NeoVen**, a personalized Neovim setup optimized for **Java development** and general coding.  
+Welcome to **NeoVen**, a personalized Neovim setup intended for **Java development** and maybe for general coding soon.  
 
 This configuration uses **Lazy.nvim** as the package manager and comes with essential plugins for productivity, language support, and aesthetics.
 
@@ -20,5 +20,5 @@ This configuration uses **Lazy.nvim** as the package manager and comes with esse
 ---
 
 ## TAKE NOTE:
-- I used help from ChatGPT and Claude in making configurations for each of the plugins I used.
-- I configured some of the things in here
+- Configurations were made by ChatGPT and Claude because I don't like wasting my time reading documentation and I don't know Lua either.
+- Small parts of it were mine.
