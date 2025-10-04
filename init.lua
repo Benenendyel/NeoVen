@@ -2,7 +2,7 @@
 --          Greet Message         --
 -- ============================== --
 local function welcome_message()
-  print([[
+	print([[
  __      __       .__                                  __            _______             ____   ____             
 /  \    /  \ ____ |  |   ____  ____   _____   ____   _/  |_  ____    \      \   ____  ___\   \ /   /____   ____  
 \   \/\/   // __ \|  | _/ ___\/  _ \ /     \_/ __ \  \   __\/  _ \   /   |   \_/ __ \/  _ \   Y   // __ \ /    \ 
@@ -14,30 +14,31 @@ end
 
 -- Run on Neovim start
 vim.api.nvim_create_autocmd("VimEnter", {
-  pattern = "*",
-  callback = welcome_message
+	pattern = "*",
+	callback = welcome_message,
 })
-
 
 --------------- For LazyVim Package Manager ----------------
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable",
-    lazypath,
-  })
+	vim.fn.system({
+		"git",
+		"clone",
+		"--filter=blob:none",
+		"https://github.com/folke/lazy.nvim.git",
+		"--branch=stable",
+		lazypath,
+	})
 end
 vim.opt.rtp:prepend(lazypath)
 
+vim.api.nvim_create_user_command("Tutor", function()
+	vim.cmd("e " .. vim.env.VIMRUNTIME .. "\\tutor\\tutor")
+end, {})
 
 -- ============================== --
 --      Loading of Configs        --
 -- ============================== --
-require("bendyl.plugins");
-require("bendyl.general-settings");
-require("bendyl.remap");
-
+require("bendyl.plugins")
+require("bendyl.general-settings")
+require("bendyl.remap")
