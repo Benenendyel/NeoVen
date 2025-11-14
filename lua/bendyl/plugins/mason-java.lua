@@ -17,7 +17,7 @@ return {
             end
 
             -- Path to JDTLS installed via Mason
-            local jdtls_cmd = vim.fn.stdpath("data") .. "/mason/bin/jdtls"
+            local jdtls_cmd = vim.fn.stdpath("data") .. "/mason-tools/bin/jdtls"
             -- Add .cmd extension on Windows
             if vim.fn.has("win32") == 1 then
                 jdtls_cmd = jdtls_cmd .. ".cmd"
