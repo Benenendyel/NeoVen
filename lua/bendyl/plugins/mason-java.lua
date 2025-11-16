@@ -16,7 +16,7 @@ return {
                 root_dir = vim.fn.expand('%:p:h')
             end
 
-            -- Path to JDTLS installed via Mason
+            -- Path to JDTLS installed via Mason (using mason-tools location)
             local jdtls_cmd = vim.fn.stdpath("data") .. "/mason-tools/bin/jdtls"
             -- Add .cmd extension on Windows
             if vim.fn.has("win32") == 1 then
@@ -43,20 +43,16 @@ return {
                         configuration = {
                             updateBuildConfiguration = "automatic",
                             -- Java 21 runtime configuration
-                            runtimes = {
+                            runtimes = java_home and {
                                 { name = "JavaSE-21", path = java_home, default = true },
-                            },
+                            } or nil,
                         },
                         maven = { downloadSources = true },
                         implementationsCodeLens = { enabled = false },
                         referencesCodeLens = { enabled = false },
                         references = { includeDecompiledSources = true },
                         format = {
-                            enabled = true,
-                            settings = {
-                                url = vim.fn.stdpath("config") .. "/lang-servers/intellij-java-google-style.xml",
-                                profile = "GoogleStyle",
-                            },
+                            enabled = false, -- DISABLED: Let conform.nvim handle formatting
                         },
                         signatureHelp = { enabled = true },
                         completion = {
@@ -68,6 +64,13 @@ return {
                                 "java.util.Objects.requireNonNull",
                                 "java.util.Objects.requireNonNullElse",
                             },
+                            filteredTypes = {
+                                "com.sun.*",
+                                "sun.*",
+                                "jdk.*",
+                                "org.graalvm.*",
+                                "io.micrometer.shaded.*",
+                            },
                         },
                         sources = {
                             organizeImports = { starThreshold = 9999, staticStarThreshold = 9999 },
@@ -76,12 +79,16 @@ return {
                 },
                 init_options = {
                     bundles = {},
-                    extendedClientCapabilities = { progressReportsSupported = true },
+                },
+                flags = {
+                    debounce_text_changes = 150,
+                    allow_incremental_sync = true,
                 },
                 -- Key mappings specific to Java
                 on_attach = function(client, bufnr)
-                    -- Enable completion triggered by <c-x><c-o>
-                    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+                    -- Disable LSP formatting to prevent conflicts with conform.nvim
+                    client.server_capabilities.documentFormattingProvider = false
+                    client.server_capabilities.documentRangeFormattingProvider = false
 
                     -- Mappings
                     local bufopts = { noremap=true, silent=true, buffer=bufnr }
@@ -93,13 +100,15 @@ return {
                     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
                     vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)
                     vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-                    vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts)
 
                     -- Java specific mappings
                     vim.keymap.set('n', '<leader>jo', jdtls.organize_imports, bufopts)
                     vim.keymap.set('n', '<leader>jv', jdtls.extract_variable, bufopts)
                     vim.keymap.set('n', '<leader>jc', jdtls.extract_constant, bufopts)
                     vim.keymap.set('v', '<leader>jm', [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], bufopts)
+                    
+                    -- Quick LSP restart keymap (for when completions break)
+                    vim.keymap.set('n', '<leader>lr', '<cmd>LspRestart<cr>', { buffer=bufnr, desc = "Restart LSP" })
                 end,
                 capabilities = require('cmp_nvim_lsp').default_capabilities(),
             }
@@ -109,4 +118,3 @@ return {
         end,
     },
 }
-
