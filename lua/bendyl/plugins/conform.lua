@@ -7,6 +7,7 @@ return {
     conform.setup({
       formatters_by_ft = {
         java = { "google-java-format" },
+        python = { "ruff_format" },
       },
       formatters = {
         ["google-java-format"] = {
