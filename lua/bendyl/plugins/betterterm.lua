@@ -14,57 +14,59 @@ return {
                 border = "curved",
             },
         })
+
         local Terminal = require("toggleterm.terminal").Terminal
-        -- SET YOUR JAVAFX PATH HERE (relative to src folder)
-        local javafx_path = "..\\javafx-sdk-21.0.2\\lib"
-        -- F5: Just open a floating terminal
-        vim.keymap.set("n", "<F5>", function()
-            Terminal:new({
-                shell = "powershell.exe",
+
+        local function find_project_root()
+            local check = vim.fn.expand("%:p:h")  -- start from the CURRENT FILE's directory
+            for _ = 1, 10 do
+                if vim.fn.filereadable(check .. "\\pom.xml") == 1 then
+                    return check
+                end
+                local parent = vim.fn.fnamemodify(check, ":h")
+                if parent == check then break end
+                check = parent
+            end
+            vim.notify("Warning: pom.xml not found!", vim.log.levels.WARN)
+            return vim.fn.expand("%:p:h")
+        end
+
+        local function maven(cmd)
+            local root = find_project_root()
+            return Terminal:new({
+                cmd = string.format([[powershell.exe -NoExit -Command "cd '%s' ; %s"]], root, cmd),
+                hidden = true,
                 direction = "float",
-            }):toggle()
-        end, { noremap = true, silent = true })
-        -- F6: Compile and run Main in normal Java project
+            })
+        end
+
+        -- F5: Open a blank floating terminal
+        vim.keymap.set("n", "<F5>", function()
+            Terminal:new({ shell = "powershell.exe", direction = "float" }):toggle()
+        end, { noremap = true, silent = true, desc = "Open terminal" })
+
+        -- F6: Compile only
         vim.keymap.set("n", "<F6>", function()
-            vim.cmd("w") -- save file
-            require("toggleterm.terminal").Terminal
-                :new({
-                    cmd = 'powershell.exe -NoExit -Command "java -cp ../bin Main"',
-                    hidden = true,
-                    direction = "float",
-                })
-                :toggle()
-        end, { noremap = true, silent = true })
-        -- F7: Compile all .java with PowerShell
+            vim.cmd("w")
+            maven("mvn clean compile"):toggle()
+        end, { noremap = true, silent = true, desc = "Maven compile" })
+
+        -- F7: Package into JAR
         vim.keymap.set("n", "<F7>", function()
-            Terminal
-                :new({
-                    cmd = [[powershell -Command "Get-ChildItem -Recurse -Filter *.java | ForEach-Object { javac -d ../bin $_.FullName }"]],
-                    hidden = true,
-                    direction = "float",
-                })
-                :toggle()
-        end, { noremap = true, silent = true })
-        -- F8: Maven compile (compiles Java files and copies resources)
+            vim.cmd("w")
+            maven("mvn clean package"):toggle()
+        end, { noremap = true, silent = true, desc = "Maven package" })
+
+        -- F8: Compile and run (normal Java)
         vim.keymap.set("n", "<F8>", function()
-            vim.cmd("w") -- save file
-            Terminal
-                :new({
-                    cmd = [[powershell.exe -NoExit -Command "cd .. ; mvn clean compile"]],
-                    hidden = true,
-                    direction = "float",
-                })
-                :toggle()
-        end, { noremap = true, silent = true })
-        -- F9: Maven run JavaFX application
+            vim.cmd("w")
+            maven("mvn clean compile exec:java"):toggle()
+        end, { noremap = true, silent = true, desc = "Maven run" })
+
+        -- F9: Compile and run (JavaFX)
         vim.keymap.set("n", "<F9>", function()
-            Terminal
-                :new({
-                    cmd = [[powershell.exe -NoExit -Command "cd .. ; mvn javafx:run"]],
-                    hidden = true,
-                    direction = "float",
-                })
-                :toggle()
-        end, { noremap = true, silent = true })
+            vim.cmd("w")
+            maven("mvn clean compile javafx:run"):toggle()
+        end, { noremap = true, silent = true, desc = "Maven JavaFX run" })
     end,
 }
