@@ -8,15 +8,20 @@ return {
 			formatters_by_ft = {
 				java = { "google-java-format" },
 				python = { "ruff_format" },
-				javascript = { "prettierd" },
-				typescript = { "prettierd" },
-				javascriptreact = { "prettierd" },
-				typescriptreact = { "prettierd" },
-				html = { "prettierd" },
-				css = { "prettierd" },
-				json = { "prettierd" },
+				javascript = { "prettier" },
+				typescript = { "prettier" },
+				javascriptreact = { "prettier" },
+				typescriptreact = { "prettier" },
+				html = { "prettier" },
+				css = { "prettier" },
+				json = { "prettier" },
 				lua = { "stylua" },
 				xml = { "xmlformatter" },
+				conform = { "sql_formatter" },
+				bash = { "beautysh" },
+				sh = { "beautysh" },
+				markdown = { "prettier" },
+				dart = { "dart_format" },
 			},
 			formatters = {
 				["google-java-format"] = {
@@ -24,7 +29,7 @@ return {
 				},
 			},
 			format_on_save = {
-				timeout_ms = 500,
+				timeout_ms = 3000,
 				lsp_fallback = true,
 			},
 		})

@@ -2,15 +2,14 @@
 return {
 	-- "rose-pine/neovim",
 	-- name = "rose-pine",
-    -- priority = 1000,
+	-- priority = 1000,
 	-- config = function()
 	--	vim.cmd("colorscheme rose-pine-moon")
 	-- end
-    
-    "iagorrr/noctishc.nvim",
-    priority = 1000,
-    config = function()
-        vim.cmd("colorscheme noctishc")
-    end,
 
+	"iagorrr/noctishc.nvim",
+	priority = 1000,
+	config = function()
+		vim.cmd("colorscheme noctishc")
+	end,
 }
